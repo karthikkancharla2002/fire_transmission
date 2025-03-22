@@ -1,6 +1,14 @@
 import random
 from scipy import stats
 
+"""
+TODO:
+    Add 5 unit types
+    J - enumerates for number of units how many types + count
+    Weather events - probabilities per type.
+    Month modifier = 0.01 ** (1 / number of units in the segment)
+"""
+
 def simulation(
     J: int,                 # Number of segments
     n_j: int,               # Number of units in segment j

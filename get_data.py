@@ -5,7 +5,11 @@ from shapely.geometry import LineString, MultiLineString
 from shapely.ops import transform
 import pyproj
 
-def download_file(url: str, filename: str, timeout: int = 30):
+def download_file(
+    url: str, 
+    filename: str, 
+    timeout: int = 30
+) -> None:
     try:
 
         with requests.get(
@@ -25,7 +29,7 @@ def download_file(url: str, filename: str, timeout: int = 30):
     except requests.exceptions.RequestException as e:
         print(f"Fail, {e}")
 
-def transform_to_geojson(json_file_path, output_geojson_path, simplification_tolerance=10, target_crs='EPSG:4326'):
+def __transform_to_geojson(json_file_path: str, output_geojson_path: str, simplification_tolerance=10, target_crs='EPSG:4326'):
     """
     Args:
         json_file_path (str): Path to the input JSON file.
@@ -98,13 +102,28 @@ def transform_to_geojson(json_file_path, output_geojson_path, simplification_tol
         print(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
-    URL = "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2/query?outFields=*&where=1%3D1&f=geojson"
+    """
+    Transmission Line data for California from ESRI
+    """
+    URL_TL = "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2/query?outFields=*&where=1%3D1&f=geojson"
 
-    esrijson_filename = "data/california_electric_transmission_lines.json"
-
-    geojson_filename = "data/california_electric_transmission_lines.geojson"
+    tl_filename = "data/california_electric_transmission_lines.geojson"
 
     download_file(
-        url=URL,
-        filename=geojson_filename
+        url=URL_TL,
+        filename=tl_filename
     )
+
+    """
+    Fuel content
+    """
+
+    URL_FC = "https://lfps.usgs.gov/arcgis/rest/services/LandfireProductService/GPServer/LandfireProductService/submitJob?Output_Projection=6414&Resample_Resolution=90&Layer_List=ELEV2020%3BSLPD2020%3BASP2020%3B140FBFM40%3B140CC%3B140CH%3B140CBH%3B140CBD&Area_Of_Interest=-123.7835%2041.7534%20-123.6352%2041.8042&Edit_Rule=%7b%22edit%22%3A%5b%7b%22condition%22%3A%5b%7b%22product%22%3A%22ELEV2020%22%2C%22operator%22%3A%22lt%22%2C%22value%22%3A1100%7d%5d%2C%22change%22%3A%5b%7b%22product%22%3A%22140FBFM40%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A163%7d%2C%7b%22product%22%3A%22140CBH%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A15%7d%2C%7b%22product%22%3A%22140CBD%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A27%7d%2C%7b%22product%22%3A%22140CC%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A66%7d%2C%7b%22product%22%3A%22140CH%22%2C%22operator%22%3A%22ib%22%2C%22value%22%3A50%7d%5d%7d%2C%7b%22condition%22%3A%5b%7b%22product%22%3A%22ELEV2020%22%2C%22operator%22%3A%22lt%22%2C%22value%22%3A1200%7d%2C%7b%22product%22%3A%22ELEV2020%22%2C%22operator%22%3A%22ge%22%2C%22value%22%3A1100%7d%5d%2C%22change%22%3A%5b%7b%22product%22%3A%22140FBFM40%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A162%7d%2C%7b%22product%22%3A%22140CBH%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A8%7d%2C%7b%22product%22%3A%22140CBD%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A17%7d%2C%7b%22product%22%3A%22140CC%22%2C%22operator%22%3A%22st%22%2C%22value%22%3A36%7d%2C%7b%22product%22%3A%22140CH%22%2C%22operator%22%3A%22db%22%2C%22value%22%3A50%7d%5d%7d%5d%7d"
+
+    fc_filename = "data/conusa_fuel_content.json"
+
+    download_file(
+        url=URL_FC,
+        filename=fc_filename
+    )
+
