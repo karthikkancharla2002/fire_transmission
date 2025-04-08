@@ -1,0 +1,63 @@
+<!-- To run, first use the command  "python -m http.server 8000", then  go to the URL http://localhost:8000/ to view the map -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Leaflet GeoJSON Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  #map {
+    height: 100%;
+    width: 100%;
+  }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  // Initialize map
+  const map = L.map('map').setView([34.0224, -118.2851], 15); // USC, Los Angeles
+
+
+  // Base layers
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const baseMaps = {
+    "OpenStreetMap": osm
+  };
+  const overlayMaps = {};
+  const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  // Loading external GeoJSON file 
+  fetch('transmission_lines.geojson')
+    .then(response => response.json())
+    .then(data => {
+      const transmission_lines = L.geoJSON(data, {
+        style: { color: 'blue', weight: 4 }
+      }).addTo(map);
+
+      layerControl.addOverlay(transmission_lines, "transmission_lines");
+      map.fitBounds(transmission_lines.getBounds()); 
+    })
+    .catch(error => {
+      console.error("Failed to load GeoJSON:", error);
+    });
+</script>
+
+</body>
+</html>
