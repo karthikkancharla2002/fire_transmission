@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+/* custom css starts here */
+
+html, body {
+  margin: 0; 
+  padding: 0; 
+}
+
+#map {
+  height: 100vh;
+  width: 100vw;
+}
