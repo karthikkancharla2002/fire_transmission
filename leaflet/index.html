@@ -1,18 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>Fire Transmission</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<title>Fire Transmission</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet 1.4.0 CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<!-- Leaflet 1.4.0 CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
 
-  <style>
-    html, body { height: 100%; margin: 0; padding: 0; }
-    #windy { height: 100%; width: 100%; }
-  </style>
+<style>
+html, body { height: 100%; margin: 0; padding: 0; }
+#windy { height: 100%; width: 100%; }
+
+/* Make all Leaflet controls inside #windy visible and on top */
+#windy .leaflet-control-container {
+  display: block !important;
+  pointer-events: auto !important;
+  z-index: 1100 !important;
+}
+
+/* Windy logo */
+#windy #logo {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1200 !important;
+}
+
+/* Bottom timeline/progress bar */
+#windy #bottom {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1150 !important;
+  pointer-events: auto !important;
+}
+
+/* Other UI controls */
+#windy #menu,
+#windy #picker,
+#windy #legend {
+  z-index: 1150 !important;
+  pointer-events: auto !important;
+}
+
+
+
+</style>
 </head>
 <body>
 
@@ -20,97 +56,98 @@
 
 <!-- JS Libraries -->
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
-<script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script> <!-- Added Windy API -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
-<script src="osmtogeojson.js"></script>
+<script src="../public/assets/osmtogeojson.js"></script>
+
+<script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script>
 
 <script>
-  // Windy API 
-  fetch('../secrets/windy.json')
-  .then(response => response.json())
-  .then(config => {
-    const options = {
-      key: config.map_forecast_key, // Use the key from the JSON file
-      lat: 34.0224,
-      lon: -118.2851,
-      zoom: 15
-    };
+// Windy API
+fetch('../secrets/windy.json')
+.then(response => response.json())
+.then(config => {
+  const options = {
+    key: config.map_forecast_key, // Use the key from the JSON file
+    lat: 34.0224,
+    lon: -118.2851,
+    zoom: 15
+  };
 
-    windyInit(options, function(windyAPI) {
-      const map = windyAPI.map; // Get Leaflet map instance
-      let currentBuildingsLayer;
+  windyInit(options, function(windyAPI) {
+    const map = windyAPI.map; // Get Leaflet map instance
+    let currentBuildingsLayer;
 
-      // Drawing layer
-      const drawnItems = new L.FeatureGroup();
-      map.addLayer(drawnItems);
+    // Drawing layer
+    const drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
 
-      const drawControl = new L.Control.Draw({
-        draw: {
-          polygon: true,
-          polyline: false,
-          rectangle: false,
-          circle: false,
-          marker: false,
-          circlemarker: false
-        },
-        edit: {
-          featureGroup: drawnItems
-        }
-      });
-      map.addControl(drawControl);
+    const drawControl = new L.Control.Draw({
+      draw: {
+        polygon: true,
+        polyline: false,
+        rectangle: false,
+        circle: false,
+        marker: false,
+        circlemarker: false
+      },
+      edit: {
+        featureGroup: drawnItems
+      }
+    });
+    map.addControl(drawControl);
 
-      // Load transmission lines 
-      fetch('../data/california_electric_transmission_lines.geojson')
-        .then(response => response.json())
-        .then(data => {
-          const transmissionLines = L.geoJSON(data, {
-            style: { color: 'blue', weight: 3 }
-          }).addTo(map);
-        })
-        .catch(console.error);
-
-      // On polygon draw (keep existing functionality)
-      map.on(L.Draw.Event.CREATED, function(e) {
-        drawnItems.clearLayers();
-        if (currentBuildingsLayer) map.removeLayer(currentBuildingsLayer);
-        
-        const drawnLayer = e.layer;
-        drawnItems.addLayer(drawnLayer);
-        const polygon = drawnLayer.toGeoJSON();
-
-        const bbox = turf.bbox(polygon);
-        const [minLon, minLat, maxLon, maxLat] = bbox;
-
-        const query = `
-          [out:json][timeout:25];
-          (way["building"](${minLat},${minLon},${maxLat},${maxLon}));
-          out body;>;out skel qt;
-        `;
-
-        fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(query))
-          .then(res => res.json())
-          .then(osmData => {
-            const geojson = osmtogeojson(osmData);
-            const filteredFeatures = geojson.features.filter(feature =>
-              turf.booleanIntersects(feature, polygon)
-            );
-            
-            currentBuildingsLayer = L.geoJSON({
-              type: "FeatureCollection",
-              features: filteredFeatures
-            }, {
-              style: { color: '#ff0000', weight: 2, fillOpacity: 0.6 }
-            }).addTo(map);
-
-            alert("Total buildings: " + filteredFeatures.length);
-          })
-          .catch(console.error);
-      });
+    // Load transmission lines
+    fetch('../data/california_electric_transmission_lines.geojson')
+    .then(response => response.json())
+    .then(data => {
+      const transmissionLines = L.geoJSON(data, {
+        style: { color: 'blue', weight: 3 }
+      }).addTo(map);
     })
-  })
-  .catch(error => {
+    .catch(console.error);
+
+    // On polygon draw (keep existing functionality)
+    map.on(L.Draw.Event.CREATED, function(e) {
+      drawnItems.clearLayers();
+      if (currentBuildingsLayer) map.removeLayer(currentBuildingsLayer);
+
+      const drawnLayer = e.layer;
+      drawnItems.addLayer(drawnLayer);
+      const polygon = drawnLayer.toGeoJSON();
+
+      const bbox = turf.bbox(polygon);
+      const [minLon, minLat, maxLon, maxLat] = bbox;
+
+      const query = `
+      [out:json][timeout:25];
+      (way["building"](${minLat},${minLon},${maxLat},${maxLon}));
+      out body;>;out skel qt;
+      `;
+
+      fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(query))
+      .then(res => res.json())
+      .then(osmData => {
+        const geojson = osmtogeojson(osmData);
+        const filteredFeatures = geojson.features.filter(feature =>
+          turf.booleanIntersects(feature, polygon)
+        );
+
+        currentBuildingsLayer = L.geoJSON({
+          type: "FeatureCollection",
+          features: filteredFeatures
+        }, {
+          style: { color: '#ff0000', weight: 2, fillOpacity: 0.6 }
+        }).addTo(map);
+
+        alert("Total buildings: " + filteredFeatures.length);
+      })
+      .catch(console.error);
+    });
+  });
+})
+.catch(error => {
   console.error('Failed to load Windy API key:', error);
 });
 </script>
