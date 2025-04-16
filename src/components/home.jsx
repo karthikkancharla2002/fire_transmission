@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import L from 'leaflet';
 import '../App.css';
-import 'leaflet-draw'; // just loads the draw control
+import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import * as turf from '@turf/turf';
 import osmtogeojson from 'osmtogeojson';
+
+// const transmissionLinesColor = 'blue';
+// const buildingsColor = '#ff0000';
 
 const Home = () => {
   useEffect(() => {
@@ -45,7 +48,7 @@ const Home = () => {
       .then(response => response.json())
       .then(data => {
         const transmissionLines = L.geoJSON(data, {
-          style: { color: 'blue', weight: 3 }
+          style: { color: 'var(--transmission-lines-color)', weight: 3 }
         }).addTo(map);
       })
       .catch(error => {
@@ -101,10 +104,12 @@ const Home = () => {
             type: "FeatureCollection",
             features: filteredFeatures
           }, {
-            style: { color: '#ff0000', weight: 2, fillOpacity: 0.6 }
+            style: { color: 'var(--buildings-color)', weight: 2, fillOpacity: 0.6 }
           }).addTo(map);
 
-          alert(" Total buildings in drawn area: " + count);
+          // alert(" Total buildings in drawn area: " + count);
+          const mapSelections = document.getElementById('map-selections');
+          mapSelections.innerHTML = `<p style="margin-top: 20px;">Total buildings in drawn area: ${count}</p>`;
         })
         .catch(err => {
           console.error("Overpass API error:", err);
@@ -114,7 +119,21 @@ const Home = () => {
   }, []);
 
   return (
-    <div id="map"></div>
+    <div class="container">
+      <div id="map"></div>
+      <div id="dashboard">
+        <h3>Dashboard</h3>
+
+        <div id="map-legend">
+          <h4>Legend</h4>
+          <p><span id="transmission-lines-legend"></span> &nbsp; Transmission Lines</p>
+          <p><span id="buildings-legend"></span> &nbsp; Buildings</p>
+        </div>
+        
+        {/* <p>Click on the map to draw a polygon and find buildings within it.</p> */}
+        <div id="map-selections"></div>
+      </div>
+    </div>
   );
   
 };
