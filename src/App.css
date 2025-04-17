@@ -67,6 +67,10 @@ html, body {
   border-radius: 10px;
 }
 
+#legend * {
+  max-height: 20px;
+}
+
 #legend p {
   margin: 0 0 5px 0;
 }
@@ -84,3 +88,58 @@ html, body {
   background-color: var(--buildings-color);
 }
 
+#fire-stations-legend {
+  height: 100%;
+  width: auto;
+}
+
+
+
+
+
+
+/* Style for the toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 100px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  border-radius: 50px;
+  left: 2.5px;
+  bottom: 2.5px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(15px);
+}

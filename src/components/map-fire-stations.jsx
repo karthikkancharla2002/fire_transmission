@@ -11,7 +11,7 @@ const MapFireStations = (map) => {
     fetch('./assets/fire-stations.geojson')
         .then(response => response.json())
         .then(data => {
-            L.geoJSON(data, {
+            const layer = L.geoJSON(data, {
                 pointToLayer: (feature, latlng) => {
                     const marker = L.marker(latlng, { icon: customIcon });
                     const props = feature.properties;
@@ -37,6 +37,7 @@ const MapFireStations = (map) => {
                   }
                   
             }).addTo(map);
+            layer.options.layerName = 'fireStations';
         })
         .catch(error => console.error("Failed to load fire stations:", error));
 };
