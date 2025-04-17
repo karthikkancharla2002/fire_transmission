@@ -9,7 +9,7 @@ import osmtogeojson from 'osmtogeojson';
 // const transmissionLinesColor = 'blue';
 // const buildingsColor = '#ff0000';
 
-const Home = () => {
+const Map = () => {
   useEffect(() => {
     if (document.getElementById('map')?._leaflet_id != null) {
       return;
@@ -138,4 +138,4 @@ const Home = () => {
   
 };
 
-export default Home;
+export default Map;
