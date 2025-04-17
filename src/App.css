@@ -67,12 +67,10 @@ html, body {
   border-radius: 10px;
 }
 
-#legend * {
-  max-height: 20px;
-}
-
-#legend p {
-  margin: 0 0 5px 0;
+#transmission-lines-toggle, #buildings-toggle, #fire-stations-toggle {
+  height: 20px;
+  width: auto;
+  margin-bottom: 5px;
 }
 
 #transmission-lines-legend, #buildings-legend {
@@ -89,16 +87,13 @@ html, body {
 }
 
 #fire-stations-legend {
-  height: 100%;
-  width: auto;
+  height: 15px;
 }
 
 
 
+/* toggle */
 
-
-
-/* Style for the toggle switch */
 .switch {
   position: relative;
   display: inline-block;
@@ -113,6 +108,7 @@ html, body {
 }
 
 .slider {
+  max-height: 20px;
   position: absolute;
   cursor: pointer;
   top: 0;
