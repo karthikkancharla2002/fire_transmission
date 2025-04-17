@@ -1,6 +1,6 @@
 :root {
-  --transmission-lines-color: blue;
-  --buildings-color: #ff0000;
+  --transmission-lines-color: #eb6e4b; /* blue */
+  --buildings-color: #4bb6eb; /* #ff0000; */
 }
 
 html, body {
