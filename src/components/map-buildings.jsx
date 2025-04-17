@@ -3,7 +3,7 @@ import L from 'leaflet';
 import * as turf from '@turf/turf';
 import osmtogeojson from 'osmtogeojson';
 
-const mapBuildings = (map, drawnItems) => {
+const MapBuildings = (map, drawnItems) => {
   let currentBuildingsLayer;
 
   // on polygon draw
@@ -68,4 +68,4 @@ const mapBuildings = (map, drawnItems) => {
   });
 };
 
-export default mapBuildings;
+export default MapBuildings;

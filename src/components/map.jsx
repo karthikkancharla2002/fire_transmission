@@ -3,12 +3,9 @@ import L from 'leaflet';
 import '../App.css';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
-// import * as turf from '@turf/turf';
-// import osmtogeojson from 'osmtogeojson';
 
 import MapTransmissionLines from './map-transmission-lines';
 import MapBuildings from './map-buildings';
-import mapBuildings from './map-buildings';
 
 const Map = () => {
   useEffect(() => {
@@ -18,7 +15,6 @@ const Map = () => {
 
     // Initializing the map
     const map = L.map('map').setView([34.0224, -118.2851], 15);
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
@@ -26,7 +22,6 @@ const Map = () => {
     // Drawing layer
     const drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
-
     const drawControl = new L.Control.Draw({
       draw: {
         polygon: true,
@@ -42,15 +37,15 @@ const Map = () => {
     });
     map.addControl(drawControl);
 
+    // display layers
     MapTransmissionLines(map);
-    mapBuildings(map, drawnItems);
+    MapBuildings(map, drawnItems);
 
   }, []);
 
   return (
     <div class="container">
-
-      {/* { MapTransmissionLines} */}
+      
       <div id="map"></div>
 
       <div id="dashboard">
