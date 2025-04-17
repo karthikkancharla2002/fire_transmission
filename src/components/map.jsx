@@ -6,6 +6,7 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 
 import MapTransmissionLines from './map-transmission-lines';
 import MapBuildings from './map-buildings';
+import MapFireStations from './map-fire-stations';
 
 const Map = () => {
   useEffect(() => {
@@ -40,6 +41,7 @@ const Map = () => {
     // display layers
     MapTransmissionLines(map);
     MapBuildings(map, drawnItems);
+    MapFireStations(map); // 1568 fire stations, 93 of them are missing coordinates
 
   }, []);
 
