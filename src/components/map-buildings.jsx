@@ -137,15 +137,19 @@ const MapBuildings = (map, drawnItems, layersRef) => {
 
         compute3DSurfaceArea(polygon).then(surfaceAreaKm2 => {
           const flatAreaM2 = computeFlatArea(polygon);
-          
-          // Convert to human-readable formats
-          const surfaceAreaM2 = surfaceAreaKm2 * 1e6; // Reverse previous km² division
+          const surfaceAreaM2 = surfaceAreaKm2 * 1e6;
           const flatAreaKm2 = flatAreaM2 / 1e6;
-
-          // Format numbers
-          terrainLabel = `${surfaceAreaKm2.toFixed(3)} km² (${surfaceAreaM2.toLocaleString()} m²)`;
-          flatLabel = `${flatAreaKm2.toFixed(3)} km² (${flatAreaM2.toLocaleString()} m²)`;
+        
+          const terrainLabel = `${surfaceAreaKm2.toFixed(3)} km² (${surfaceAreaM2.toLocaleString()} m²)`;
+          const flatLabel = `${flatAreaKm2.toFixed(3)} km² (${flatAreaM2.toLocaleString()} m²)`;
+        
+          mapSelections.innerHTML = `
+            <p style="margin-top: 20px;">🏠 Total buildings: ${houseCount}</p>
+            <p>⛰️ Terrain-aware area: ${terrainLabel}</p>
+            <p>🟦 Flat 2D area: ${flatLabel}</p>
+          `;
         });
+        
         
         currentBuildingsLayer.options.layerName = 'buildings';
         layersRef.current.buildings = currentBuildingsLayer;
