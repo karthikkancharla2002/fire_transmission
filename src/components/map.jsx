@@ -49,7 +49,6 @@ const Map = () => {
       <div id="map"></div>
 
       <div id="dashboard">
-        {/* <h3>Dashboard</h3> */}
         <div id="legend">
           <p><span id="transmission-lines-legend"></span> &nbsp; Transmission Lines</p>
           <p><span id="buildings-legend"></span> &nbsp; Buildings</p>
