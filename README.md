@@ -15,6 +15,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 1. assets\
 `public/assets/`
 
+for more elevation tiles, use the below URLs and add them in src/components/map-buildings.jsx\
+[https://prd-tnm.s3.amazonaws.com/index.html?prefix=StagedProducts/Elevation/1/TIFF/current/](https://prd-tnm.s3.amazonaws.com/index.html?prefix=StagedProducts/Elevation/1/TIFF/current/)\
+[https://portal.opentopography.org/raster?opentopoID=OTNED.012021.4269.2](https://portal.opentopography.org/raster?opentopoID=OTNED.012021.4269.2)
+
 2. components\
 `src/components/`
 
