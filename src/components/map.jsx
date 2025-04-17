@@ -87,32 +87,33 @@ const Map = () => {
 
       <div id="dashboard">
         <div id="legend">
-          {/* <p><span id="transmission-lines-legend"></span> &nbsp; Transmission Lines</p> */}
-          {/* <p><span id="buildings-legend"></span> &nbsp; Buildings</p> */}
 
-          <label className="switch">
-            <input type="checkbox" checked={visibleLayers.transmissionLines} onChange={() => toggleLayer('transmissionLines')} />
-            <span className="slider"></span>
-          </label> &nbsp;
-          <span id="transmission-lines-legend"></span> &nbsp;
-          Transmission Lines
-          <br />
+          <div id="transmission-lines-toggle">
+            <label className="switch">
+              <input type="checkbox" checked={visibleLayers.transmissionLines} onChange={() => toggleLayer('transmissionLines')} />
+              <span className="slider"></span>
+            </label> &nbsp;
+            <span id="transmission-lines-legend"></span> &nbsp;
+            Transmission Lines
+          </div>
 
-          <label className="switch">
-            <input type="checkbox" checked={visibleLayers.buildings} onChange={() => toggleLayer('buildings')} />
-            <span className="slider"></span>
-          </label> &nbsp;
-          <span id="buildings-legend"></span> &nbsp;
-          Buildings
-          <br />
+          <div id="buildings-toggle">
+            <label className="switch">
+              <input type="checkbox" checked={visibleLayers.buildings} onChange={() => toggleLayer('buildings')} />
+              <span className="slider"></span>
+            </label> &nbsp;
+            <span id="buildings-legend"></span> &nbsp;
+            Buildings
+          </div>
 
-          <label className="switch">
-            <input type="checkbox" checked={visibleLayers.fireStations} onChange={() => toggleLayer('fireStations')} />
-            <span className="slider"></span>
-          </label> &nbsp;
-          <img id="fire-stations-legend" src="https://cdn-icons-png.flaticon.com/512/2053/2053928.png" alt="fire-station-icon" /> &nbsp;
-          Fire Stations
-          <br />
+          <div id="fire-stations-toggle">
+            <label className="switch">
+              <input type="checkbox" checked={visibleLayers.fireStations} onChange={() => toggleLayer('fireStations')} />
+              <span className="slider"></span>
+            </label> &nbsp;
+            <img id="fire-stations-legend" src="https://cdn-icons-png.flaticon.com/512/2053/2053928.png" alt="fire-station-icon" /> &nbsp;
+            Fire Stations
+          </div>
 
         </div>
         <div id="drawn-items"></div>
