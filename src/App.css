@@ -15,7 +15,7 @@ html, body {
 }
 
 
-.App-header {
+.App-header, .App-footer {
   height: 30px;
   padding: 10px;
   position: absolute;
@@ -26,15 +26,12 @@ html, body {
   text-align: center;
 }
 
+.App-header {
+  top: 0;
+}
+
 .App-footer {
-  height: 30px;
-  padding: 10px;
-  position: absolute;
-  z-index: 2;
-  font-weight: bold;
-  text-shadow: 0 0 5px #bc5a5a;
-  width: 100%;
-  text-align: center;
+  bottom: 0;
 }
 
 
