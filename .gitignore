@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#assets
+/public/assets/USGS_1_n34w118.tif
+/public/assets/USGS_1_n35w118.tif
+/public/assets/USGS_1_n35w119.tif

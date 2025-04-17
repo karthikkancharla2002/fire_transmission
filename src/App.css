@@ -139,3 +139,8 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(15px);
 }
+
+#buildings-toggle {
+  display: none;
+}
+

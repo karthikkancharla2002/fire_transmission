@@ -74,7 +74,7 @@ const Map = () => {
     map.addControl(drawControl);
 
     // display layers
-    MapTransmissionLines(map);
+    MapTransmissionLines(map, layersRef);
     MapBuildings(map, drawnItems, layersRef);
     MapFireStations(map); // 1568 fire stations, 93 of them are missing coordinates
 

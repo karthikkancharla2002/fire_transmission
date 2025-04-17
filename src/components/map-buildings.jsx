@@ -111,6 +111,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     if (currentBuildingsLayer) {
       map.removeLayer(currentBuildingsLayer);
     }
+    document.getElementById('buildings-toggle').style.display = 'block';
 
     const drawnLayer = e.layer;
     drawnItems.addLayer(drawnLayer);
@@ -153,10 +154,11 @@ const MapBuildings = (map, drawnItems, layersRef) => {
           const flatLabel = `${flatAreaKm2.toFixed(3)} km² (${flatAreaM2.toLocaleString()} m²)`;
 
           mapSelections.innerHTML = `
-            <p style="margin-top: 20px;">🏠 Total buildings: ${houseCount}</p>
-            <p>⛰️ Terrain-aware area: ${terrainLabel}</p>
-            <p>🟦 Flat 2D area: ${flatLabel}</p>
-          `;
+          <p style="margin-top: 20px; margin-bottom: 6px;">🏠 <strong>Total buildings:</strong> ${houseCount}</p>
+          <p style="margin: 4px 0;">⛰️ <strong>Terrain-aware area:</strong> ${surfaceAreaKm2.toFixed(3)} km² <span style="color: gray;">(${surfaceAreaM2.toLocaleString()} m²)</span></p>
+          <p style="margin: 4px 0;">🟦 <strong>Flat 2D area:</strong> ${flatAreaKm2.toFixed(3)} km² <span style="color: gray;">(${flatAreaM2.toLocaleString()} m²)</span></p>
+        `;
+        
         });
 
         currentBuildingsLayer.options.layerName = 'buildings';
