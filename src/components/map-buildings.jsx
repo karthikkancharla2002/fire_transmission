@@ -3,7 +3,7 @@ import L from 'leaflet';
 import * as turf from '@turf/turf';
 import osmtogeojson from 'osmtogeojson';
 
-const MapBuildings = (map, drawnItems) => {
+const MapBuildings = (map, drawnItems, layersRef) => {
   let currentBuildingsLayer;
 
   // on polygon draw
@@ -56,6 +56,8 @@ const MapBuildings = (map, drawnItems) => {
         }, {
           style: { color: 'var(--buildings-color)', weight: 2, fillOpacity: 0.6 }
         }).addTo(map);
+        currentBuildingsLayer.options.layerName = 'buildings';
+        layersRef.current.buildings = currentBuildingsLayer;
 
         // alert(" Total buildings in drawn area: " + count);
         const mapSelections = document.getElementById('drawn-items');
