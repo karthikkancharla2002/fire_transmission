@@ -44,18 +44,17 @@ const Map = () => {
   }, []);
 
   return (
-    <div class="container">
+    <div className="container">
       
       <div id="map"></div>
 
       <div id="dashboard">
-        <h3>Dashboard</h3>
-        <div id="map-legend">
-          <h4>Legend</h4>
+        {/* <h3>Dashboard</h3> */}
+        <div id="legend">
           <p><span id="transmission-lines-legend"></span> &nbsp; Transmission Lines</p>
           <p><span id="buildings-legend"></span> &nbsp; Buildings</p>
         </div>
-        <div id="map-selections"></div>
+        <div id="drawn-items"></div>
       </div>
 
     </div>

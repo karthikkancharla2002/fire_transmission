@@ -58,7 +58,7 @@ const MapBuildings = (map, drawnItems) => {
         }).addTo(map);
 
         // alert(" Total buildings in drawn area: " + count);
-        const mapSelections = document.getElementById('map-selections');
+        const mapSelections = document.getElementById('drawn-items');
         mapSelections.innerHTML = `<p style="margin-top: 20px;">Total buildings in drawn area: ${count}</p>`;
       })
       .catch(err => {

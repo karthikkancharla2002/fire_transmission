@@ -30,7 +30,7 @@ html, body {
   height: 30px;
   padding: 10px;
   position: absolute;
-  /* z-index: 2; */
+  z-index: 2;
   font-weight: bold;
   text-shadow: 0 0 5px #bc5a5a;
   width: 100%;
@@ -39,7 +39,7 @@ html, body {
 
 
 
-/* home */
+/* map */
 
 #map {
   position: absolute;
@@ -49,6 +49,10 @@ html, body {
   width: 100vw;
   z-index: 1;
 }
+
+
+
+/* dashboard */
 
 #dashboard {
   position: absolute;
@@ -62,13 +66,11 @@ html, body {
   z-index: 1000;
 }
 
-#map-legend {
-  padding: 10px;
+#legend {
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.05);
 }
 
-#map-legend h4, p {
+#legend p {
   margin: 0 0 5px 0;
 }
 
