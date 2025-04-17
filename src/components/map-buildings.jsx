@@ -15,6 +15,8 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     // , 'USGS_1_n35w119.tif',  'USGS_1_n35w118.tif', 'USGS_1_n34w118.tif'
   ]; // Add/remove tiles depending on how wide you want coverage
 
+  // Download more tiles from https://prd-tnm.s3.amazonaws.com/index.html?prefix=StagedProducts/Elevation/1/TIFF/current/, which has the data from https://portal.opentopography.org/raster?opentopoID=OTNED.012021.4269.2
+
   Promise.all(
     demFiles.map(file =>
       fetch(`./assets/${file}`)
