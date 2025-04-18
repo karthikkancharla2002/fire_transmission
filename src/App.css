@@ -1,6 +1,6 @@
 :root {
-  --transmission-lines-color: blue;
-  --buildings-color: #ff0000;
+  --transmission-lines-color: #eb6e4b; /* blue */
+  --buildings-color: #4bb6eb; /* #ff0000; */
 }
 
 html, body {
@@ -15,53 +15,62 @@ html, body {
 }
 
 
-.App-header {
+.App-header, .App-footer {
   height: 30px;
   padding: 10px;
   position: absolute;
   z-index: 2;
   font-weight: bold;
-  text-shadow: 0 0 5px #bc5a5a;
+  text-shadow: 0 0 5px white;
   width: 100%;
   text-align: center;
+}
+
+.App-header {
+  top: 0;
 }
 
 .App-footer {
-  height: 30px;
-  padding: 10px;
-  position: absolute;
-  /* z-index: 2; */
-  font-weight: bold;
-  text-shadow: 0 0 5px #bc5a5a;
-  width: 100%;
-  text-align: center;
+  bottom: 0;
 }
 
 
 
-/* home */
+/* map */
 
 #map {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100vh;
-  width: 75%;
-  position: relative;
+  width: 100vw;
   z-index: 1;
 }
 
+
+
+/* dashboard */
+
 #dashboard {
-  height: 100vh;
-  width: 25%;
-  margin: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1000;
 }
 
-#map-legend {
-  padding: 10px;
+#legend {
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.05);
 }
 
-#map-legend h4, p {
-  margin: 0 0 5px 0;
+#transmission-lines-toggle, #buildings-toggle, #fire-stations-toggle {
+  height: 20px;
+  width: auto;
+  margin-bottom: 5px;
 }
 
 #transmission-lines-legend, #buildings-legend {
@@ -75,5 +84,63 @@ html, body {
 
 #buildings-legend {
   background-color: var(--buildings-color);
+}
+
+#fire-stations-legend {
+  height: 15px;
+}
+
+
+
+/* toggle */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  max-height: 20px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 100px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  border-radius: 50px;
+  left: 2.5px;
+  bottom: 2.5px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(15px);
+}
+
+#buildings-toggle {
+  display: none;
 }
 
