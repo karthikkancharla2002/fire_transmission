@@ -119,6 +119,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     drawnItems.addLayer(drawnLayer);
     const polygon = drawnLayer.toGeoJSON();
     const [minLon, minLat, maxLon, maxLat] = turf.bbox(polygon);
+    console.log("Bounding box:", minLon, minLat, maxLon, maxLat);
 
     const mapSelections = document.getElementById('drawn-items');
     mapSelections.innerHTML = `<p style="margin-top: 20px;">⏳ Loading buildings ...</p>`;
@@ -134,6 +135,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     `;
 
     const overpassUrl = "https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(query);
+    console.log("Overpass API URL:", overpassUrl);
     fetch(overpassUrl)
       .then(res => res.json())
       .then(osmData => {
