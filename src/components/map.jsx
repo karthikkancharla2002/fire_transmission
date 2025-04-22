@@ -46,6 +46,9 @@ const Map = () => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+    document.getElementById('recenter-btn')?.addEventListener('click', () => {
+      map.setView([34.0224, -118.2851], 15);
+    });
 
     setTimeout(() => {
       map.eachLayer(layer => {
@@ -117,6 +120,7 @@ const Map = () => {
 
         </div>
         <div id="drawn-items"></div>
+        <button id="recenter-btn">re-center</button>
       </div>
 
     </div>
