@@ -79,11 +79,20 @@ fetch('../secrets/windy.json')
     const map = windyAPI.map; // Get Leaflet map instance
     let currentBuildingsLayer;
 
+    store.set(
+      'overlay',
+      'wind',
+      {
+        forceChange: true,
+      }
+    )
+    store.set('particles_anim', true);
+
     // Drawing layer
-    const drawnItems = new L.FeatureGroup();
+    const drawnItems = new window.L.FeatureGroup();
     map.addLayer(drawnItems);
 
-    const drawControl = new L.Control.Draw({
+    const drawControl = new window.L.Control.Draw({
       draw: {
         polygon: true,
         polyline: false,
@@ -102,14 +111,14 @@ fetch('../secrets/windy.json')
     fetch('../data/california_electric_transmission_lines.geojson')
     .then(response => response.json())
     .then(data => {
-      const transmissionLines = L.geoJSON(data, {
+      const transmissionLines = window.L.geoJSON(data, {
         style: { color: 'blue', weight: 3 }
       }).addTo(map);
     })
     .catch(console.error);
 
     // On polygon draw (keep existing functionality)
-    map.on(L.Draw.Event.CREATED, function(e) {
+    map.on(window.L.Draw.Event.CREATED, function(e) {
       drawnItems.clearLayers();
       if (currentBuildingsLayer) map.removeLayer(currentBuildingsLayer);
 
@@ -134,7 +143,7 @@ fetch('../secrets/windy.json')
           turf.booleanIntersects(feature, polygon)
         );
 
-        currentBuildingsLayer = L.geoJSON({
+        currentBuildingsLayer = window.L.geoJSON({
           type: "FeatureCollection",
           features: filteredFeatures
         }, {

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
 import '../App.css';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -41,9 +40,9 @@ const Map = () => {
     }
 
     // Initializing the map
-    const map = L.map('map').setView([34.0224, -118.2851], 15);
+    const map = window.L.map('map').setView([34.0224, -118.2851], 15);
     mapRef.current = map;
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
@@ -56,9 +55,9 @@ const Map = () => {
     }, 1000); // give it 1 sec to ensure all are loaded
 
     // Drawing layer
-    const drawnItems = new L.FeatureGroup();
+    const drawnItems = new window.L.FeatureGroup();
     map.addLayer(drawnItems);
-    const drawControl = new L.Control.Draw({
+    const drawControl = new window.L.Control.Draw({
       draw: {
         polygon: true,
         polyline: false,

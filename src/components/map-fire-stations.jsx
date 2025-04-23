@@ -1,19 +1,18 @@
-import L from 'leaflet';
 
-const customIcon = L.icon({
+const customIcon = window.L.icon({
     iconUrl: 'https://cdn-icons-png.flaticon.com/512/2053/2053928.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [0, -41]
   });
 
-const MapFireStations = (map) => {
+const MapFireStations = (map, layersRef) => {
     fetch('./assets/fire-stations.geojson')
         .then(response => response.json())
         .then(data => {
-            const layer = L.geoJSON(data, {
+            const layer = window.L.geoJSON(data, {
                 pointToLayer: (feature, latlng) => {
-                    const marker = L.marker(latlng, { icon: customIcon });
+                    const marker = window.L.marker(latlng, { icon: customIcon });
                     const props = feature.properties;
                   
                     const popupContent = `
@@ -38,6 +37,7 @@ const MapFireStations = (map) => {
                   
             }).addTo(map);
             layer.options.layerName = 'fireStations';
+            layersRef.current['fireStations'] = layer;
         })
         .catch(error => console.error("Failed to load fire stations:", error));
 };

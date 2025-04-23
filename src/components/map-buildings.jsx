@@ -1,5 +1,4 @@
 // src/components/map-buildings.js
-import L from 'leaflet';
 import * as turf from '@turf/turf';
 import osmtogeojson from 'osmtogeojson';
 import { fromArrayBuffer } from 'geotiff';
@@ -27,7 +26,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
           const [xmin, ymin, xmax, ymax] = image.getBoundingBox();
           const bounds = [[ymin, xmin], [ymax, xmax]];
   
-          L.rectangle(bounds, {
+          window.L.rectangle(bounds, {
             color: "#00bfff",
             weight: 2,
             fillOpacity: 0.1,
@@ -108,7 +107,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     return turf.area(polygon);
   }
 
-  map.on(L.Draw.Event.CREATED, function (e) {
+  map.on(window.L.Draw.Event.CREATED, function (e) {
     drawnItems.clearLayers();
     if (currentBuildingsLayer) {
       map.removeLayer(currentBuildingsLayer);
@@ -138,7 +137,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
       .then(osmData => {
         const geojson = osmtogeojson(osmData);
         const filteredFeatures = geojson.features.filter(f => turf.booleanIntersects(f, polygon));
-        currentBuildingsLayer = L.geoJSON({
+        currentBuildingsLayer = window.L.geoJSON({
           type: "FeatureCollection",
           features: filteredFeatures
         }, {
