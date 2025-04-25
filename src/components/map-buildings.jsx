@@ -118,6 +118,10 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     drawnItems.addLayer(drawnLayer);
     const polygon = drawnLayer.toGeoJSON();
     const [minLon, minLat, maxLon, maxLat] = turf.bbox(polygon);
+    console.log("Bounding box:", minLon, minLat, maxLon, maxLat);
+
+    const mapSelections = document.getElementById('drawn-items');
+    mapSelections.innerHTML = `<p style="margin-top: 20px;">⏳ Loading buildings ...</p>`;
 
     const query = `
       [out:json][timeout:25];
@@ -130,8 +134,7 @@ const MapBuildings = (map, drawnItems, layersRef) => {
     `;
 
     const overpassUrl = "https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(query);
-    const mapSelections = document.getElementById('drawn-items');
-
+    console.log("Overpass API URL:", overpassUrl);
     fetch(overpassUrl)
       .then(res => res.json())
       .then(osmData => {
@@ -151,8 +154,8 @@ const MapBuildings = (map, drawnItems, layersRef) => {
           const surfaceAreaM2 = surfaceAreaKm2 * 1e6;
           const flatAreaKm2 = flatAreaM2 / 1e6;
 
-          const terrainLabel = `${surfaceAreaKm2.toFixed(3)} km² (${surfaceAreaM2.toLocaleString()} m²)`;
-          const flatLabel = `${flatAreaKm2.toFixed(3)} km² (${flatAreaM2.toLocaleString()} m²)`;
+          // const terrainLabel = `${surfaceAreaKm2.toFixed(3)} km² (${surfaceAreaM2.toLocaleString()} m²)`;
+          // const flatLabel = `${flatAreaKm2.toFixed(3)} km² (${flatAreaM2.toLocaleString()} m²)`;
 
           mapSelections.innerHTML = `
           <p style="margin-top: 20px; margin-bottom: 6px;">🏠 <strong>Total buildings:</strong> ${houseCount}</p>

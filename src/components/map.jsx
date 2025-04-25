@@ -46,6 +46,20 @@ const Map = () => {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
+    map.on('moveend', () => {
+      const defaultLat = 34.0224;
+      const defaultLng = -118.2851;
+      const center = map.getCenter(); // current center on screen
+      const zoom = map.getZoom();     // current zoom on screen
+      const isMoved = Math.abs(center.lat - defaultLat) > 0.0001 || Math.abs(center.lng - defaultLng) > 0.0001 || zoom !== 15;
+      document.getElementById('recenter-btn').style.display = isMoved ? 'block' : 'none';
+    });
+    
+    
+    document.getElementById('recenter-btn')?.addEventListener('click', () => {
+      map.setView([34.0224, -118.2851], 15);
+    });
+
     setTimeout(() => {
       map.eachLayer(layer => {
         if (layer.options.layerName) {
@@ -116,6 +130,10 @@ const Map = () => {
 
         </div>
         <div id="drawn-items"></div>
+      </div>
+
+      <div id="extra-controls">
+        <button id="recenter-btn">re-center</button>
       </div>
 
     </div>
