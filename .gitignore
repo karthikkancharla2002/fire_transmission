@@ -30,3 +30,5 @@ yarn-error.log*
 /public/assets/secrets/
 
 .venv/
+
+.env
