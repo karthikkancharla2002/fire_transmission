@@ -25,18 +25,6 @@ def get_data(
                     response=response
                 )
 
-            elif layer_type == "winds":
-                response_json = response.json()
-
-                forecast_url = response_json["properties"]["forecastZone"]
-
-                get_data(
-                    url=forecast_url,
-                    filename=filename,
-                    layer_type=None,
-                    headers=headers
-                )
-
     except requests.exceptions.RequestException as e:
         print(f"Fail, {e}")
 
@@ -72,22 +60,3 @@ if __name__ == "__main__":
         headers=None
     )
 
-    """
-    Winds
-    """
-
-    URL_W = "https://api.weather.gov/points/34.032929628409185,-118.29052093567063"
-
-    w_filename = "data/winds.geojson"
-
-    w_headers = {
-        "User-Agent": "(marshall.usc.edu/personnel/sriram-dasu, email@email.com)",  
-        "Accept": "application/geo+json"    
-    }
-
-    get_data(
-        url=URL_W,
-        filename=w_filename,
-        layer_type="winds",
-        headers=w_headers
-    )
