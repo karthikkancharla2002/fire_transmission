@@ -1,41 +1,77 @@
-const WindPointForecast= (point, layersRef) =>{
+import { useEffect } from 'react';
+import axios from 'axios';
+import L from 'leaflet';
 
-    const [data, setData] = useState(null);
+const WindPointForecast = ({ lat, lon, map }) => {
+  useEffect(() => {
+    if (!map || lat == null || lon == null) return;
+    let popup = null;
+    let isMounted = true;
 
-    /*
-     Windy Point Forecast API URL, KEY and parameters
-     */
-    const windtPointForecastURL = 'https://api.windy.com/api/point-forecast/v2'
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('https://api.windy.com/api/point-forecast/v2', {
+          lat,
+          lon,
+          model: "namConus",
+          parameters: ['wind', 'temp'],
+          levels: ['surface'],
+          key: "mHy3DHTf2b1ibzuRBWcbn1mGxRFiFSWG",
+          
+        },
+      
+        {
+          headers: {
+            'Content-Type': 'application/json' // Mandatory for JSON payload
+          }
+        }
+      
+        );
 
-    const key = process.env.WINDY_POINT_FORECAST_KEY;
+        if (!isMounted) return;
 
-    const lat = point.lat;
-    const lon = point.lon;
+        const data = response.data; 
+        console.log('Windy Point Forecast Response:', response.status);
 
-    const model = namConus // Contintental US model, including some of Canada and Mexico
+        console.log('Windy Point Forecast Data:', data);
+        const windU = data['wind_u-surface']?.[0];
+        const windV = data['wind_v-surface']?.[0];
+        const temp = data['temp-surface']?.[0];
+        const windSpeed = windU && windV ? Math.sqrt(windU ** 2 + windV ** 2).toFixed(1) : 'N/A';
+        const windDir = windU && windV ? ((Math.atan2(windV, windU) * 180 / Math.PI + 360) % 360).toFixed(0) : 'N/A';
 
-    const parameters = ['wind', 'temp']
+        popup = L.popup()
+          .setLatLng([lat, lon])
+          .setContent(`
+            <div class="windy-popup">
+              <div>🌡️ ${temp} ${data.units?.['temp-surface'] || ''}</div>
+              <div>🎐 ${windSpeed} ${data.units?.['wind_u-surface'] || ''}</div>
+              <div>🧭 ${windDir}°</div>
+            </div>
+          `)
+          .openOn(map);
+      } catch (err) {
+        console.error('Windy Point Forecast Error:', err);
+        if (isMounted) {
+          popup = L.popup()
+            .setLatLng([lat, lon])
+            .setContent('⚠️ Failed to fetch wind data')
+            .openOn(map);
+        }
+      }
+    };
 
-    const levels = ['surface'] // Surface level
+    fetchData();
 
-    /*
-     Windy Point Forecast API request
-     */
+    return () => {
+      isMounted = false;
+      if (popup && map) {
+        map.closePopup(popup);
+      }
+    };
+  }, [lat, lon, map]);
 
-    try {
-        const response = axios.post(windtPointForecastURL, {
-            lat: lat,
-            lon: lon,
-            model: model,
-            parameters: parameters,
-            levels: levels,
-            key: key
-        })
-
-        setData(response.data);
-    } catch (error) {  
-        console.error("Failed to fetch Windy Point Forecast data:", error);
-    }
-}
+  return null;
+};
 
 export default WindPointForecast;

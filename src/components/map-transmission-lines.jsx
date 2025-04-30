@@ -1,9 +1,10 @@
+import L from 'leaflet';
 
 const MapTransmissionLines = (map, layersRef) => {
     fetch('./assets/transmission_lines.geojson')
       .then(response => response.json())
       .then(data => {
-        const layer = window.L.geoJSON(data, {
+        const layer = L.geoJSON(data, {
           style: { color: 'var(--transmission-lines-color)', weight: 3 }
         }).addTo(map);
   
