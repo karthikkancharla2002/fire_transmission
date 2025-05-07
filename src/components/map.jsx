@@ -21,10 +21,6 @@ const Map = () => {
   const layersRef = useRef({});
 
   const [windyCoords, setWindyCoords] = useState(
-    // { 
-    //   lat: 34.0224, 
-    //   lng: -118.2851 
-    // }
     null
   );
 
@@ -40,12 +36,18 @@ const Map = () => {
       } else {
         map.addLayer(layer);
       }
+    } else {
+      
     }
     // Always toggle the visibility state for any layer
     setVisibleLayers(prev => ({
       ...prev,
       [layerKey]: !prev[layerKey]
     }));
+
+    if (layerKey === 'windy') {
+      visibleLayers.windy = true; 
+    }
     
   };
 
@@ -71,10 +73,8 @@ const Map = () => {
     });
 
     const mapContainer = document.getElementById('map');
-    // if (mapContainer) {
-    //   mapContainer.addEventListener('contextmenu', (e) => e.preventDefault());
-    // }
 
+    // Handle right cliick events
     map.on('contextmenu', (e) => {
       if (visibleLayers.windy) {
         setWindyCoords(e.latlng);
@@ -128,23 +128,10 @@ const Map = () => {
     // display layers
     MapTransmissionLines(map, layersRef);
     MapBuildings(map, drawnItems, layersRef);
-    MapFireStations(map); // 1568 fire stations, 93 of them are missing coordinates
-      // Example coordinates for Windy Point Forecast
-
-    
+    MapFireStations(map); // 1568 fire stations, 93 of them are missing coordinates    
     
 
-    // map.on('contextmenu', handleMapRightClick);
-    map.on('contextmenu',(e) => {
-      console.log('Right click at:', e.latlng);
-      if (visibleLayers.windy) {
-        setWindyCoords(e.latlng);
-
-        console.log('Windy Point Forecast coordinates set:', windyCoords);
-
-        map.closePopup();
-      }
-    } );
+    map.on('contextmenu', handleMapRightClick);
 
     return () => {
       map.off('contextmenu', handleMapRightClick);
