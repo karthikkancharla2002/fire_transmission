@@ -16,7 +16,7 @@ const WindPointForecast = ({ lat, lon, map }) => {
           model: "namConus",
           parameters: ['wind', 'temp'],
           levels: ['surface'],
-          key: "mHy3DHTf2b1ibzuRBWcbn1mGxRFiFSWG",
+          key: process.env.REACT_APP_WINDY_POINT_FORECAST_KEY,
           
         },
       
@@ -33,7 +33,6 @@ const WindPointForecast = ({ lat, lon, map }) => {
         const data = response.data; 
         console.log('Windy Point Forecast Response:', response.status);
 
-        console.log('Windy Point Forecast Data:', data);
         const windU = data['wind_u-surface']?.[0];
         const windV = data['wind_v-surface']?.[0];
         const temp = data['temp-surface']?.[0];
