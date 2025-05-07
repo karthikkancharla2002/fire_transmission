@@ -1,6 +1,6 @@
 :root {
   --transmission-lines-color: #eb6e4b; /* blue */
-  --buildings-color: #4bb6eb; /* #ff0000; */
+  --buildings-color: #36e613; /* #ff0000; */
 }
 
 html, body {
@@ -45,6 +45,15 @@ html, body {
   z-index: 1;
 }
 
+#windy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+}
+
 
 
 #dashboard {
@@ -75,7 +84,7 @@ html, body {
   border-radius: 10px;
 }
 
-#transmission-lines-toggle, #buildings-toggle, #fire-stations-toggle {
+#transmission-lines-toggle, #buildings-toggle, #fire-stations-toggle, #windy-toggle {
   height: 20px;
   width: auto;
   margin-bottom: 5px;
@@ -168,4 +177,113 @@ input:checked + .slider:before {
 
 #recenter-btn:hover {
   background-color: #f2f2f2;
+}
+
+.hover-trigger {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
+.weather-indicator {
+  font-size: 1.8rem;
+  transition: transform 0.2s ease;
+}
+
+.weather-indicator:hover {
+  transform: scale(1.1);
+}
+
+.weather-tooltip {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  min-width: 160px;
+  z-index: 1000;
+  pointer-events: none;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.weather-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-label {
+  color: #666;
+  font-weight: 500;
+  margin-right: 12px;
+}
+
+.weather-value {
+  color: #333;
+  font-weight: 600;
+}
+
+.weather-loading {
+  color: #666;
+  font-size: 0.9rem;
+  padding: 8px;
+}
+
+.weather-error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  padding: 8px;
+  border: 1px solid #ffe0e0;
+  border-radius: 4px;
+  background: #fff5f5;
+}
+
+.windy-tooltip {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  backdrop-filter: blur(4px);
+  min-width: 140px;
+  font-size: 0.9rem;
+}
+
+.windy-content div {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.windy-loading {
+  position: absolute;
+  background: white;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.windy-popup {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.windy-popup div {
+  margin: 3px 0;
 }

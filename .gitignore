@@ -26,3 +26,9 @@ yarn-error.log*
 /public/assets/USGS_1_n34w118.tif
 /public/assets/USGS_1_n35w118.tif
 /public/assets/USGS_1_n35w119.tif
+
+/public/assets/secrets/
+
+.venv/
+
+.env

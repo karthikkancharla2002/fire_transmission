@@ -7,32 +7,48 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import MapTransmissionLines from './map-transmission-lines';
 import MapBuildings from './map-buildings';
 import MapFireStations from './map-fire-stations';
+import WindPointForecast from './windy-point-forecast';
 
 const Map = () => {
   const [visibleLayers, setVisibleLayers] = useState({
     fireStations: true,
     buildings: true,
-    transmissionLines: true
+    transmissionLines: true,
+    windy: false
   });
 
   const mapRef = useRef(null);
   const layersRef = useRef({});
 
+  const [windyCoords, setWindyCoords] = useState(
+    null
+  );
+
   const toggleLayer = (layerKey) => {
-    const map = mapRef.current;
-    const layer = layersRef.current[layerKey];
-    if (!layer) return;
+    // For Leaflet layers, handle add/remove as before
+    if (layerKey !== 'windy') {
+      const map = mapRef.current;
+      const layer = layersRef.current[layerKey];
+      if (!layer) return;
   
-    if (map.hasLayer(layer)) {
-      map.removeLayer(layer);
+      if (map.hasLayer(layer)) {
+        map.removeLayer(layer);
+      } else {
+        map.addLayer(layer);
+      }
     } else {
-      map.addLayer(layer);
+      
     }
-  
+    // Always toggle the visibility state for any layer
     setVisibleLayers(prev => ({
       ...prev,
       [layerKey]: !prev[layerKey]
     }));
+
+    if (layerKey === 'windy') {
+      visibleLayers.windy = true; 
+    }
+    
   };
 
   useEffect(() => {
@@ -55,11 +71,33 @@ const Map = () => {
       const isMoved = Math.abs(center.lat - defaultLat) > 0.0001 || Math.abs(center.lng - defaultLng) > 0.0001 || zoom !== 15;
       document.getElementById('recenter-btn').style.display = isMoved ? 'block' : 'none';
     });
+
+    const mapContainer = document.getElementById('map');
+
+    // Handle right cliick events
+    map.on('contextmenu', (e) => {
+      if (visibleLayers.windy) {
+        setWindyCoords(e.latlng);
+        map.closePopup();
+      }
+    });
     
+    console.log('Map initialized with center:', map.getCenter(), 'and zoom:', map.getZoom());
     
     document.getElementById('recenter-btn')?.addEventListener('click', () => {
       map.setView([34.0224, -118.2851], 15);
     });
+
+    const handleMapRightClick = (e) => {
+      console.log('Right click at:', e.latlng);
+      if (visibleLayers.windy) {
+        setWindyCoords(e.latlng);
+
+        map.closePopup();
+      }
+    };
+
+
 
     setTimeout(() => {
       map.eachLayer(layer => {
@@ -90,9 +128,15 @@ const Map = () => {
     // display layers
     MapTransmissionLines(map, layersRef);
     MapBuildings(map, drawnItems, layersRef);
-    MapFireStations(map); // 1568 fire stations, 93 of them are missing coordinates
+    MapFireStations(map); // 1568 fire stations, 93 of them are missing coordinates    
+    
 
-  }, []);
+    map.on('contextmenu', handleMapRightClick);
+
+    return () => {
+      map.off('contextmenu', handleMapRightClick);
+    };
+  }, [visibleLayers.windy]);
 
   return (
     <div className="container">
@@ -129,6 +173,15 @@ const Map = () => {
             Fire Stations
           </div>
 
+          <div id="windy-toggle">
+            <label className="switch">
+              <input type="checkbox" checked={visibleLayers.windy} onChange={() => toggleLayer('windy')} />
+              <span className="slider"></span>
+            </label> &nbsp;
+            <span role="img" aria-label="wind">🌬️</span> &nbsp;
+            Windy Point Forecast
+          </div>
+
         </div>
         <div id="drawn-items"></div>
       </div>
@@ -136,6 +189,14 @@ const Map = () => {
       <div id="extra-controls">
         <button id="recenter-btn">re-center</button>
       </div>
+
+      {visibleLayers.windy && windyCoords && (
+        <WindPointForecast 
+          lat={windyCoords.lat} 
+          lon={windyCoords.lng} 
+          map={mapRef.current}
+        />
+      )}
 
     </div>
   );
