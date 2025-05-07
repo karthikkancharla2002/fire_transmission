@@ -1,5 +1,4 @@
 import requests
-from requests import Response
 
 def get_data(
     url: str, 
@@ -20,7 +19,7 @@ def get_data(
             response.raise_for_status()
 
             if layer_type == "transmission_line" or layer_type is None:
-                download_geojson(
+                chunked_download(
                     filename=filename,
                     response=response
                 )
@@ -28,9 +27,9 @@ def get_data(
     except requests.exceptions.RequestException as e:
         print(f"Fail, {e}")
 
-def download_geojson(
+def chunked_download(
     filename: str,
-    response: Response,
+    response: requests.Response,
 ) -> None:
     """
     Download GeoJSON file from GET request.
@@ -46,17 +45,21 @@ def download_geojson(
 
 
 if __name__ == "__main__":
-    """
-    Transmission Line data for California from ESRI
-    """
-    URL_TL = "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2/query?outFields=*&where=1%3D1&f=geojson"
 
-    tl_filename = "../data/california_electric_transmission_lines.geojson"
 
-    get_data(
-        url=URL_TL,
-        filename=tl_filename,
-        layer_type="transmission_line",
-        headers=None
-    )
+    download = [
+        # Transmission lines
+        (
+            "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2/query?outFields=*&where=1%3D1&f=geojson",
+            "..public/assets/transmission_lines.geojson"
+        )
+    ]
+
+    for url, filename in download:
+        get_data(
+            url=url,
+            filename=filename,
+            layer_type="transmission_line",
+            headers=None
+        )
 
